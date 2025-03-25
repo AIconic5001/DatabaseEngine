@@ -39,7 +39,7 @@ def search_paper_by_keyword(keyword):
             'publish_date': publish_date,
             'citations': citations
         })
-    return results
+    return results #Test
 
 message = 'Machine Learning'
 results = search_paper_by_keyword(message)
