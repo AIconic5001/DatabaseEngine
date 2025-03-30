@@ -4,9 +4,9 @@ import pandas as pd
 import pyodbc
 import urllib
 import sqlalchemy
+import random  # Import random to generate random numbers
 
 from config import driver, server, database
-
 
 conn_str = (
     f"DRIVER={driver};"
@@ -49,8 +49,7 @@ for filename in os.listdir(folder_path):
             if kw not in existing_keywords_set:
                 new_keywords.append(kw)
 
-
-new_fields_unique = list(set(new_fields))  #
+new_fields_unique = list(set(new_fields))
 if len(existing_fields) > 0:
     start_field_id = existing_fields["ID"].max() + 1
 else:
@@ -67,15 +66,24 @@ if len(existing_keywords) > 0:
 else:
     start_kw_id = 1
 
+# Generate random count values for new keywords
 df_new_keywords = pd.DataFrame({
     "ID": range(start_kw_id, start_kw_id + len(new_keywords_unique)),
-    "Keyword": new_keywords_unique
+    "Keyword": new_keywords_unique,
+    "count": [random.randint(1, 100) for _ in new_keywords_unique]
 })
-
 
 all_fields = pd.concat([existing_fields, df_new_fields], ignore_index=True)
 all_keywords = pd.concat([existing_keywords, df_new_keywords], ignore_index=True)
 
+# Ensure that every row in the final keywords DataFrame has a "count" value.
+if "count" not in all_keywords.columns:
+    all_keywords["count"] = [random.randint(1, 100) for _ in range(len(all_keywords))]
+else:
+    # If there are any missing values in "count", fill them with a random number.
+    all_keywords["count"] = all_keywords["count"].fillna(
+        pd.Series([random.randint(1, 100) for _ in range(len(all_keywords))])
+    )
 
 all_fields.to_sql("fields", engine, if_exists="replace", index=False)
 all_keywords.to_sql("keywords", engine, if_exists="replace", index=False)

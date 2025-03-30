@@ -8,8 +8,8 @@ def run_script(script_name):
     subprocess.run(["python", script_name], check=True)
 
 if __name__ == "__main__":
-    total_results = 1000
-    batch_size = 1000
+    total_results = 100
+    batch_size = 100
     delay = 4
 
     category_values = list(arxiv_category_mapping.values())

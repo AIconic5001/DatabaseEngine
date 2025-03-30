@@ -24,6 +24,7 @@ BEGIN
         category NVARCHAR(255),
         publish_date DATE,
         summary NVARCHAR(MAX),
+        citation NVARCHAR(MAX),
         url NVARCHAR(500) NOT NULL
     );
 END
@@ -57,7 +58,8 @@ for csv_file in csv_files:
         "Categories": "ar_category",
         "URL": "url",
         "Published": "publish_date",
-        "Summary": "summary"
+        "Summary": "summary",
+        "Citation" : "citation"
     })
 
    
@@ -78,14 +80,15 @@ for csv_file in csv_files:
         "category",
         "publish_date",
         "summary",
+        "citation",
         "url"
     ]]
 
   
     insert_query = '''
     INSERT INTO arxiv (paper_name, author_name, ar_category, category, 
-                       publish_date, summary, url)
-    VALUES (?, ?, ?, ?, ?, ?, ?)
+                       publish_date, summary,citation, url)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     '''
 
     for _, row in df_arxiv.iterrows():
@@ -97,6 +100,7 @@ for csv_file in csv_files:
             row.category,
             row.publish_date,
             row.summary,
+            row.citation,
             row.url
         )
 
