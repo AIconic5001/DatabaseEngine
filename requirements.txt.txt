@@ -1,0 +1,2 @@
+SQLAlchemy==2.0.38
+pyodbc==5.2.0

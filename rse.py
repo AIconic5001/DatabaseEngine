@@ -2,19 +2,19 @@ import pyodbc
 import json
 import config
 
-server = config.server
-database = config.database
-driver = config.driver
+def rse(keyword):
+    server = config.server
+    database = config.database
+    driver = config.driver
 
-conn = pyodbc.connect(
-    f"DRIVER={driver};"
-    f"SERVER={server};"
-    f"DATABASE={database};"
-    f"Trusted_Connection=yes;"
-)
-cursor = conn.cursor()
+    conn = pyodbc.connect(
+        f"DRIVER={driver};"
+        f"SERVER={server};"
+        f"DATABASE={database};"
+        f"Trusted_Connection=yes;"
+    )
+    cursor = conn.cursor()
 
-def search_paper_by_keyword(keyword):
     query = "SELECT paper_name, url, publish_date, citation FROM arxiv WHERE summary LIKE ?"
     pattern = f"%{keyword}%"
     cursor.execute(query, (pattern,))
@@ -39,11 +39,6 @@ def search_paper_by_keyword(keyword):
             'publish_date': publish_date,
             'citations': citations
         })
-    return results 
 
-message = 'Machine Learning'
-results = search_paper_by_keyword(message)
-
-print(json.dumps(results, indent=2, default=str))
-
-conn.close()
+    conn.close()
+    return results
